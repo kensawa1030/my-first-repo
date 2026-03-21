@@ -1,0 +1,25 @@
+name: Auto Update
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 毎日実行
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Update file
+        run: |
+          echo "更新日時: $(date)" > log.txt
+
+      - name: Commit
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "auto update"
+          git push
