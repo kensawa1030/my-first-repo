@@ -5,21 +5,25 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   update:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Update file
         run: |
           echo "更新日時: $(date)" > log.txt
 
-      - name: Commit
+      - name: Commit and push
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "actions@github.com"
-          git add .
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add log.txt
           git commit -m "auto update" || echo "no changes"
           git push
